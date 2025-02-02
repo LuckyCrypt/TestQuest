@@ -1,0 +1,53 @@
+﻿@model TestQuest.Web.ViewModels.IndexViewModel
+@{
+    ViewData["Title"] = "Mouse Tracking";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Mouse Tracking</h1>
+    <button id="sendDataButton" class="btn btn-primary">Отправить данные</button>
+
+</div>
+
+<script type="text/javascript">
+    var mouseData = [];
+    document.addEventListener('mousemove', function(e) {
+        var time = new Date().getTime();
+        mouseData.push([e.clientX, e.clientY, time]);
+    });
+
+   /*  document.getElementById('sendDataButton').addEventListener('click', function () {
+        if (mouseData.length === 0) {
+            return; // Выходим из функции, если данных нет
+        }*/
+    document.getElementById('sendDataButton').addEventListener('click', function () {
+        if (mouseData.length === 0) {
+            alert('No mouse data collected!');
+            return;
+        }
+
+        var jsonData = JSON.stringify(mouseData);
+        var viewModel = { mouseData: jsonData };
+        /*console.log("jsonData:", jsonData) // Добавили для отладки
+        console.log("viewModel:", viewModel) // Добавили для отладки*/
+
+        fetch('/home/savedata', {
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(viewModel)
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Data sent successfully!');
+                mouseData = [];
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error sending data!');
+            });
+    });
+</script>
