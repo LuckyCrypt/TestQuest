@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "Личный кабинет";
+    Layout = null; // Отключаем _Layout.cshtml
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TestQuest.styles.css" asp-append-version="true" />
+    <title>Личный кабинет</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            padding-top: 20px;
+            position: fixed; /* Закрепленная боковая панель */
+            width: 250px;
+        }
+
+        .sidebar a {
+        color: white;
+        padding: 10px 20px;
+        display: block;
+        text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .main-content {
+            margin-left: 250px; /* Отступ для боковой панели */
+            padding: 20px;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка -->
+    <header class="bg-dark text-white py-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <a class="navbar-brand" href="#">Логотип Продмастер(Пока нет)</a>
+            </div>
+            <div>
+                <span class="me-3">Привет, 
+                    @if (ViewBag.WelcomeMessage != null)
+                    {
+                        @ViewBag.WelcomeMessage
+                    }
+                </span>
+                <button class="btn btn-outline-light">Выйти</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Боковая панель -->
+    <div class="sidebar">
+        <a href="#profile"><i class="fas fa-user me-2"></i>Профиль</a>
+        <a href="#tests"><i class="fas fa-list me-2"></i>Мои тесты</a>
+        <a asp-controller="CreateTest" asp-action="index" class="btn btn-primary">
+            Создать тест
+        </a>
+        <a href="#create"><i class="fas fa-plus me-2"></i>Создать тест</a>
+        <a href="#statistics"><i class="fas fa-chart-bar me-2"></i>Статистика</a>
+    </div>
+
+    <!-- Основное содержимое -->
+    <div class="main-content">
+        <section id="profile">
+            <h2>Профиль</h2>
+            <p>Информация о пользователе.</p>
+        </section>
+
+        <section id="tests">
+            <h2>Мои тесты</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Описание</th>
+                        <th>Дата создания</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Тест 1</td>
+                        <td>Описание теста 1</td>
+                        <td>2023-10-27</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">Редактировать</button>
+                            <button class="btn btn-sm btn-danger">Удалить</button>
+                            <button class="btn btn-sm btn-info">Статистика</button>
+                        </td>
+                    </tr>
+                    <!-- Добавьте другие строки для тестов -->
+                </tbody>
+            </table>
+        </section>
+
+        <section id="statistics">
+            <h2>Статистика</h2>
+            <p>Здесь будет статистика по тестам.</p>
+        </section>
+    </div>
+
+    <footer class="bg-dark text-white py-3 text-center">
+        &copy; 2023 Продмастер
+    </footer>
+</body>
+</html>

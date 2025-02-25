@@ -1,0 +1,29 @@
+﻿@using TestQuest.Models.MyTests
+@model TestsEnterModel
+
+<h1>Список Tests</h1>
+
+<h2>Добавление Tests</h2>
+<form asp-action="create" asp-controller="MyTests">
+    <p>
+        <label asp-for="Name">Имя</label><br />
+        <input type="text" asp-for="Name" />
+    </p>
+    <p>
+        <input type="submit" value="Отправить" />
+    </p>
+</form>
+@* <tr>
+    @foreach (var product in Model)
+    {
+        <li>
+            @Te.Name - @product.
+        </li>
+    }
+</tr>
+@foreach (var Tests in Model)
+{
+    <td>
+        @Tests.Name - @Tests.UserID
+    </td>
+} *@

@@ -1,0 +1,28 @@
+﻿@using TestQuest.Models.Account
+@model LoginViewModel
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<form asp-controller="Account" asp-action="Login" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div> <!-- Валидация сверху -->
+    <div class="mb-3">
+        <!-- Увеличиваем отступы между элементами формы -->
+        <label asp-for="Login" class="form-label">Логин</label> <!-- Делаем label более явным -->
+        <input asp-for="Login" class="form-control form-control-lg" placeholder="Введите логин" /> <!-- Большой input, placeholder -->
+        <span asp-validation-for="Login" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Пароль</label>
+        <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="Введите пароль" /> <!-- Добавляем type="password" -->
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="d-grid gap-2">
+        <!-- Кнопка занимает всю ширину -->
+        <button type="submit" class="btn btn-primary btn-lg">Войти</button> <!-- Большая кнопка -->
+    </div>
+</form>

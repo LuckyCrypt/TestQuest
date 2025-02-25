@@ -1,0 +1,38 @@
+﻿@using TestQuest.Models.Account;
+@model AccountViewModel 
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div class="container-fluid d-Flex align-itews-center justify-content-center flex-colawn" style="min-height: 85vh;">
+        <div class="card">
+            <div class="card-header d-flex justify-content-center">
+                <span class="text-priwary fw-bold" style="font-size: 25px">
+                    <i class="fa-solid fa-clipboard-list"></i> Вход
+                </span>
+            </div>
+            <div class="card-body ps-5 pe-4">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="pills-login" role="tabpanel">
+                        @{
+                            ViewData.TemplateInfo.HtmlFieldPrefix = "l";
+                            await Html.RenderPartialAsync("_Login", Model?.LoginViewModel);
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

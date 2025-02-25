@@ -1,0 +1,152 @@
+﻿@model TestQuest.Models.MyTests.CreateTest
+@{ 
+    ViewData["Title"] = "Создать тест";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            padding-top: 20px;
+            position: fixed; /* Закрепленная боковая панель */
+            width: 250px;
+        }
+
+        .sidebar a {
+        color: white;
+        padding: 10px 20px;
+        display: block;
+        text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-content">
+        <!-- Шапка -->
+        <header class="bg-dark text-white py-3">
+            <div class="container d-flex justify-content-between align-items-center">
+                <div>
+                    <a class="navbar-brand" href="#">Логотип Продмастер(Пока нет)</a>
+                </div>
+                <div>
+                    <span class="me-3">Привет, 
+                        @if (ViewBag.WelcomeMessage != null)
+                        {
+                            @ViewBag.WelcomeMessage 
+                        }
+                    </span>
+                    <button class="btn btn-outline-light">Выйти</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Боковая панель -->
+        <section id="create">
+            <h2>Создать тест</h2>
+            <form asp-action="CreateTest" method="post">
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Название теста</label>
+                    <input type="text" class="form-control" id="Name" asp-for="Tests.Name" placeholder="Введите название теста">
+                    <span asp-validation-for="Tests.Name" class="text-danger"></span>
+                </div>
+
+                <h3>Вопросы</h3>
+                <div id="questions-container">
+@*                 @for (int i = 0; i < Model.Questions.; i++)
+                {
+                    <div class="input-group mb-3">
+                        <div class="input-group-text">
+                            <input class="form-check-input mt-0 correct-answer" type="radio" value="@Model.Questions[i].Answer[j].Id" asp-for="Questions[i].CorrectAnswerId" aria-label="Radio button for correct answer">
+                        </div>
+                        <input type="text" class="form-control answerText" asp-for="Questions[i].Answers[j].Text" aria-label="Text input for answer">
+                    </div>
+                } *@
+                </div>
+
+                <button type="button" class="btn btn-primary" id="add-question">Добавить вопрос</button>
+                <button type="submit" class="btn btn-success">Сохранить тест</button>
+            </form>
+        </section>
+    </div>
+
+
+    <footer class="bg-dark text-white py-3 text-center">
+        &copy; 2023 Продмастер
+    </footer>
+     @section Scripts {
+        <script src="~/js/TestCreate.js"></script>
+     }
+@* <script>
+        $(document).ready(function () {
+            // Добавить вопрос
+            $("#add-question").click(function () {
+                var newQuestion = `
+                    <div class="question">
+                        <div class="mb-3">
+                            <label for="questionText" class="form-label">Текст вопроса</label>
+                            <input type="text" class="form-control questionText" placeholder="Введите текст вопроса">
+                        </div>
+                        <h4>Варианты ответов</h4>
+                        <div class="answers">
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0 correct-answer" type="radio" value="" aria-label="Radio button for correct answer">
+                                </div>
+                                <input type="text" class="form-control answerText" aria-label="Text input for answer">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0 correct-answer" type="radio" value="" aria-label="Radio button for correct answer">
+                                </div>
+                                <input type="text" class="form-control answerText" aria-label="Text input for answer">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-secondary add-answer">Добавить ответ</button>
+                        <button type="button" class="btn btn-sm btn-danger remove-question">Удалить вопрос</button>
+                    </div>
+                `;
+                $("#questions-container").append(newQuestion);
+            });
+
+            // Удалить вопрос
+            $(document).on('click', '.remove-question', function () {
+                $(this).closest('.question').remove();
+            });
+
+            // Добавить ответ
+            $(document).on('click', '.add-answer', function () {
+                var newAnswer = `
+                    <div class="input-group mb-3">
+                        <div class="input-group-text">
+                            <input class="form-check-input mt-0 correct-answer" type="radio" value="" aria-label="Radio button for correct answer">
+                        </div>
+                        <input type="text" class="form-control answerText" aria-label="Text input for answer">
+                    </div>
+                `;
+                $(this).siblings('.answers').append(newAnswer);
+            });
+        });
+    </script> *@
+</body>
+</html> 
+ 
