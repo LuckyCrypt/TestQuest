@@ -5,20 +5,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let answerIndex = 0;
     let questionIndex = 0;
-
+    let type
     // Функция для создания элемента с несколькими ответами
     function createAnswerElementWithSeveralAnswers() {
         const answerDiv = document.createElement('div');
         answerDiv.classList.add('input-group', 'mb-3');
-        answerDiv.id = `Answers_${answerIndex}_div`;
+        answerDiv.id = `Several_Answers`;
 
         const inputGroupText = document.createElement('div');
         inputGroupText.classList.add('input-group-text');
 
         const correctRadio = document.createElement('input');
         correctRadio.classList.add('form-check-input', 'mt-0', 'correct-answer');
-        correctRadio.type = 'radio';
-        correctRadio.name = 'correctAnswer'; // Важно: даем всем radio button одинаковое имя в рамках вопроса
+        correctRadio.type = 'checkbox';
+        correctRadio.name = 'correctAnswer';
         correctRadio.ariaLabel = 'Radio button for correct answer';
         correctRadio.id = `Answers_${answerIndex}_radio`;
 
@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
         answerInput.type = 'text';
         answerInput.classList.add('form-control', 'answerText');
         answerInput.ariaLabel = 'Text input for answer';
-
         answerInput.name = `Answers[${answerIndex}].Text`;
         answerInput.id = `Answers_${answerIndex}_Text`;
 
@@ -35,10 +34,17 @@ document.addEventListener('DOMContentLoaded', function () {
         validationSpan.dataset.valmsgFor = `Answers[${answerIndex}].Text`;
         validationSpan.dataset.valmsgReplace = "true"; //Важно
         answerIndex++;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.id = `remove-question`;
+        deleteButton.classList.add('mb-3','remove-question');
+        deleteButton.textContent = 'Удалить';
+
         inputGroupText.appendChild(correctRadio);
         answerDiv.appendChild(inputGroupText);
         answerDiv.appendChild(answerInput);
         answerDiv.appendChild(validationSpan);
+        answerDiv.appendChild(deleteButton);
 
         return answerDiv;
     } questionsContainer
@@ -87,12 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const inputGroupText = document.createElement('div');
         inputGroupText.classList.add('input-group-text');
 
-        const correctRadio = document.createElement('input');
-        correctRadio.classList.add('form-check-input', 'mt-0', 'correct-answer');
-        correctRadio.type = 'radio';
-        correctRadio.name = 'correctAnswer'; // Важно: даем всем radio button одинаковое имя в рамках вопроса
-        correctRadio.ariaLabel = 'Radio button for correct answer';
-        correctRadio.id = `Answers_${answerIndex}_radio`;
 
         const answerInput = document.createElement('input');
         answerInput.type = 'text';
@@ -107,7 +107,14 @@ document.addEventListener('DOMContentLoaded', function () {
         validationSpan.dataset.valmsgFor = `Answers[${answerIndex}].Text`;
         validationSpan.dataset.valmsgReplace = "true"; //Важно
         answerIndex++;
-        inputGroupText.appendChild(correctRadio);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Удалить';
+        deleteButton.addEventListener('click', function () {
+            // Удаляем родительский элемент (answerElement)
+            answerElement.remove();  // ИЛИ this.closest('.answer-item').remove();
+        });
+
         answerDiv.appendChild(inputGroupText);
         answerDiv.appendChild(answerInput);
         answerDiv.appendChild(validationSpan);
@@ -155,6 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Функция для создания элемента вопроса
     function createQuestionElement() {
         const questionDiv = document.createElement('div');
+
         questionDiv.classList.add('questions-container');
         questionDiv.innerHTML = `
             ${CreateQuestionText().outerHTML}
@@ -165,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
             <button type="button" class="btn btn-sm btn-secondary add-answer">Добавить ответ</button>
             <button type="button" class="btn btn-sm btn-danger remove-question">Удалить вопрос</button>
-            <button type="button" class="btn btn-sm btn-danger remove-answer">Удалить ответ</button>
             <select class="dropdown-menu-dark" id="SetTypeQuestion">
                 <option value="oneAnswer">Один ответ</option>
                 <option value="severalAnswers">Несколько ответов</option>
@@ -180,15 +187,20 @@ document.addEventListener('DOMContentLoaded', function () {
             answersContainer.appendChild(createAnswerElementWithSeveralAnswers());
         });
 
-        const removeQuestionButton = questionDiv.querySelector('.remove-question');
+        // Делегированный обработчик событий для удаления вопроса (Не нужен так как на родительском будет один обработчик и этого дотсаточно)
+/*        const removeQuestionButton = questionDiv.querySelector('.remove-question');
         removeQuestionButton.addEventListener('click', function () {
             questionDiv.remove();
-        });
-        const removeAnswersButton = questionDiv.querySelector('.remove-answer');
+        });*/
+/*        const removeAnswersButton = questionDiv.querySelector('.remove-answer');
         removeAnswersButton.addEventListener('click', function () {
-            document.getElementById('Answers_' + answerIndex + '_div').remove();
-            answerIndex--;
-        });
+            const answersContainer = questionDiv.querySelector('.answers');
+            answersContainer.;
+       *//*     questionDiv.querySelector('Answers_' + answerIndex-1 + '_div').remove();*//*
+            *//*//*const ansver = document.getElementById('Answers_' + answerIndex + '_div');*//*
+*//*//*            ansver.remove()*//*
+*//*//*            answerIndex--;*//*
+        });*/
 
 
         //Обработчик radio button-ов для корректных ответов (нужно убедиться, что только один выбран)
@@ -207,21 +219,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Функция изменения состояния вопроса
     function TypeQuestionChange(value) {
+        var answersContainer;
         switch (value) {
             case "oneAnswer":
-                event.target.parentElement.remove();
-                //questionsContainer.appendChild(createQuestionElementWithOneAnswer());
+                answersContainer = questionsContainer.querySelector('.answers');
+                while (answersContainer.firstChild) {
+                    answersContainer.removeChild(answersContainer.firstChild);
+                }
+                answersContainer.appendChild(createAnswerElementWithOneAnswer());
+                answersContainer.appendChild(createAnswerElementWithOneAnswer());
                 break;
             case "severalAnswers":
-                event.target.parentElement.remove();
-                //questionsContainer.appendChild(());
+                answersContainer = questionsContainer.querySelector('.answers');
+                while (answersContainer.firstChild) {
+                    answersContainer.removeChild(answersContainer.firstChild);
+                }
+                answersContainer.appendChild(createAnswerElementWithSeveralAnswers());
+                answersContainer.appendChild(createAnswerElementWithSeveralAnswers());
                 break;
             case "freeAnswer":
-                event.target.parentElement.remove();
-                //questionsContainer.appendChild(createQuestionElementWithFreeAnswer());
+                answersContainer = questionsContainer.querySelector('.answers');
+                while (answersContainer.firstChild) {
+                    answersContainer.removeChild(answersContainer.firstChild);
+                }
+                answersContainer.appendChild(createAnswerElementWithFreeAnswer());
                 break;
         }
-        return 0;
+        delete answersContainer;
     }
 
     // Обработчик для добавления вопроса(Если быть точным это добавление объекта вопроса в DOM при нажатии на кнопку добавить вопрос )
@@ -233,6 +257,12 @@ document.addEventListener('DOMContentLoaded', function () {
     questionsContainer.appendChild(createQuestionElement());
 
     // Делегированный обработчик событий для удаления вопроса 
+    questionsContainer.addEventListener('click', function (event) {
+        if (event.target.classList.contains('remove-question')) {
+            event.target.parentElement.remove();
+        }
+    });
+    // Делегированный обработчик событий для удаления ответа
     questionsContainer.addEventListener('click', function (event) {
         if (event.target.classList.contains('remove-answer')) {
             event.target.parentElement.remove();
