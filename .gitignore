@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /TestQuest/appsettings.json
 /TestQuest/appsettings.json
+/TestQuest/appsettings.Development.json
+/TestQuest/appsettings.Development.json
